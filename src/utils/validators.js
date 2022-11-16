@@ -1,5 +1,5 @@
-import {helpers as vuelidateHelpers} from 'vuelidate/lib/validators';
-import firebase from 'firebase/compat';
+import {helpers as vuelidateHelpers} from 'vuelidate/lib/validators'
+import firebase from 'firebase/compat'
 
 export const uniqueUsername = (value) => {
   if (!vuelidateHelpers.req(value)) {
