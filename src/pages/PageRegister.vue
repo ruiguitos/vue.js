@@ -83,10 +83,9 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/database'
-import {email, helpers as vuelidateHelpers, minLength, required, url} from 'vuelidate/lib/validators'
+
+import {email, minLength, required, url} from 'vuelidate/lib/validators'
+import {uniqueEmail, uniqueUsername, responseOk, supportedImageFile} from '@/utils/validators'
 
 export default {
   data () {
@@ -107,28 +106,12 @@ export default {
       },
       username: {
         required,
-        unique (value) {
-          if (!vuelidateHelpers.req(value)) {
-            return true
-          }
-          return new Promise((resolve, reject) => {
-            firebase.database().ref('users').orderByChild('usernameLower').equalTo(value.toLowerCase())
-              .on('value', snapshot => resolve(!snapshot.exists()))
-          })
-        }
+        unique: uniqueUsername
       },
       email: {
         required,
         email,
-        unique (value) {
-          if (!vuelidateHelpers.req(value)) {
-            return true
-          }
-          return new Promise((resolve, reject) => {
-            firebase.database().ref('users').orderByChild('email').equalTo(value.toLowerCase())
-              .on('value', snapshot => resolve(!snapshot.exists()))
-          })
-        }
+        unique: uniqueEmail
       },
       password: {
         required,
@@ -136,24 +119,8 @@ export default {
       },
       avatar: {
         url,
-        supportedImageFile (value) {
-          if (!vuelidateHelpers.req(value)) {
-            return true
-          }
-          const supported = ['jpg', 'jpeg', 'gif', 'png', 'svg']
-          const suffix = value.split('.').pop()
-          return supported.includes(suffix)
-        },
-        responseOk (value) {
-          if (!vuelidateHelpers.req(value)) {
-            return true
-          }
-          return new Promise((resolve, reject) => {
-            fetch(value)
-              .then(response => resolve(response.ok))
-              .catch(() => resolve(false))
-          })
-        }
+        supportedImageFile,
+        responseOk
       }
     }
   },
