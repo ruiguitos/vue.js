@@ -29,22 +29,19 @@
 </template>
 
 <script>
-
 export default {
-
   props: {
     thread: {
       required: true,
       type: Object
     }
   },
-
   computed: {
     repliesCount () {
-      return this.$store.getters.threadRepliesCount(this.thread['.key'])// return the amount of replies
+      return this.$store.getters['threads/threadRepliesCount'](this.thread['.key'])
     },
     user () {
-      return this.$store.state.users[this.thread.userId] // return users who published the thread
+      return this.$store.state.users.items[this.thread.userId]
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <header id="header" class="header">
+  <header class="header" id="header">
 
     <router-link
       :to="{name: 'Home'}"
@@ -7,6 +7,7 @@
     >
       <img src="../assets/img/vueschool-logo.svg">
     </router-link>
+
     <div class="btn-hamburger">
       <!-- use .btn-humburger-active to open the menu -->
       <div class="top bar"></div>
@@ -15,63 +16,59 @@
     </div>
 
     <!-- use .navbar-open to open nav -->
-        <li class="navbar-user" v-if="user">
-          <router-link :to="{name: 'Profile'}">
-            <img alt="" class="avatar-small" :src="user.avatar">
+    <nav class="navbar">
+      <ul v-if="user">
+        <li class="navbar-user">
+          <a @click.prevent="userDropdownOpen = !userDropdownOpen">
+            <img class="avatar-small" :src="user.avatar" alt="">
             <span>
-                        {{ user.name }}
-                        <img alt="" class="icon-profile" src="../assets/img/arrow-profile.svg">
-                    </span>
-          </router-link>
+                {{user.name}}
+                <img class="icon-profile" src="../assets/img/arrow-profile.svg" alt="">
+            </span>
+          </a>
 
           <!-- dropdown menu -->
           <!-- add class "active-drop" to show the dropdown -->
-          <div id="user-dropdown">
+          <div id="user-dropdown" :class="{'active-drop': userDropdownOpen}">
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
-              <li class="dropdown-menu-item"><a href="profile.html">View profile</a></li>
-              <li class="dropdown-menu-item"><a href="#">Log out</a></li>
+              <li class="dropdown-menu-item">
+                <router-link :to="{name: 'Profile'}">View Profile</router-link>
+              </li>
+              <li class="dropdown-menu-item">
+                <a @click.prevent="$store.dispatch('auth/signOut')">Sign Out</a>
+              </li>
             </ul>
           </div>
         </li>
-
-      <ul>
-        <!--        <li class="navbar-item">-->
-        <!--          <a href="index.html">Home</a>-->
-        <!--        </li>-->
-        <!--        <li class="navbar-item">-->
-        <!--          <a href="category.html">Category</a>-->
-        <!--        </li>-->
-        <!--        <li class="navbar-item">-->
-        <!--          <a href="forum.html">Forum</a>-->
-        <!--        </li>-->
-        <!--        <li class="navbar-item">-->
-        <!--          <a href="thread.html">Thread</a>-->
-        <!--        </li>-->
-        <!--        &lt;!&ndash; Show these option only on mobile&ndash;&gt;-->
-        <!--        <li class="navbar-item mobile-only">-->
-        <!--          <a href="profile.html">My Profile</a>-->
-        <!--        </li>-->
-        <!--        <li class="navbar-item mobile-only">-->
-        <!--          <a href="#">Logout</a>-->
-        <!--        </li>-->
       </ul>
-
+      <ul v-else>
+        <li class="navbar-item">
+          <router-link :to="{name: 'SignIn'}">Sign In</router-link>
+        </li>
+        <li class="navbar-item">
+          <router-link :to="{name: 'Register'}">Register</router-link>
+        </li>
+      </ul>
+    </nav>
   </header>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
-
 export default {
+  data () {
+    return {
+      userDropdownOpen: false
+    }
+  },
   computed: {
     ...mapGetters({
-      'user': 'authUser'
+      'user': 'auth/authUser'
     })
   }
 }
 </script>
 
 <style scoped>
-
 </style>

@@ -5,6 +5,7 @@ import App from './App'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
 import 'firebase/compat/database'
+// import firebase from 'firebase'
 import router from './router'
 import store from './store'
 import AppDate from '@/components/AppDate'
@@ -13,18 +14,16 @@ Vue.component('AppDate', AppDate)
 
 Vue.config.productionTip = false
 
-const firebaseConfig = {
+// Initialize Firebase
+const config = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.FIREBASE_DATABASE_URL,
   projectId: process.env.FIREBASE_PROJECT_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  messagingSenderId: process.env.FIREBASE_MESSAGING_ID
 }
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(config)
 
 /* eslint-disable no-new */
 new Vue({
@@ -32,8 +31,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App },
-  beforeCreate () {
-    store.dispatch('fetchUser', {id: store.state.authId})
-  }
+  components: { App }
 })

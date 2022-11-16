@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   props: {
     threadId: {
@@ -49,8 +50,8 @@ export default {
       return !!this.post
     }
   },
-
   methods: {
+    ...mapActions('posts', ['createPost', 'updatePost']),
     save () {
       this.persist()
         .then(post => {
@@ -83,5 +84,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
